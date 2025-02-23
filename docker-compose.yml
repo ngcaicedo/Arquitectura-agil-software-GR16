@@ -1,6 +1,13 @@
-version: '3.8'
+# version: '3.8'
 
 services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
   voting_rutero:
     build: ./voting_rutero
     ports:
@@ -9,6 +16,15 @@ services:
       - rutero1
       - rutero2
       - rutero3
+    networks:
+      - app_network
+
+  celery:
+    build: ./voting_rutero
+    depends_on:
+      - voting_rutero
+      - redis
+    command: celery -A app.celery worker --loglevel=info
     networks:
       - app_network
 
