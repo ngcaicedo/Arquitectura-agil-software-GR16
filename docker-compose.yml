@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  voting_rutero:
+    build: ./voting_rutero
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rutero1
+      - rutero2
+      - rutero3
+    networks:
+      - app_network
+
+  rutero1:
+    build: ./rutero
+    ports:
+      - "5001:5001"
+    environment:
+      - RUTERO_ID=1
+    networks:
+      - app_network
+
+  rutero2:
+    build: ./rutero
+    ports:
+      - "5002:5001" 
+    environment:
+      - RUTERO_ID=2
+    networks:
+      - app_network
+
+  rutero3:
+    build: ./rutero
+    ports:
+      - "5003:5001"
+    environment:
+      - RUTERO_ID=3
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
