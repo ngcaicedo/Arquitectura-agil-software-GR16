@@ -4,7 +4,7 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
     networks:
       - app_network
 
@@ -25,6 +25,8 @@ services:
       - voting_rutero
       - redis
     command: celery -A app.celery worker --loglevel=info
+    volumes:
+      - ./voting_rutero:/app
     networks:
       - app_network
 
