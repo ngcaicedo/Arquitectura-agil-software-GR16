@@ -53,8 +53,12 @@ class Login(Resource):
                 return jsonify({"message": "User logged in", "user_id": user.get('id'), "user_perfil": user.get("perfil"), "token": str(token.json().get('access_token'))})
         return jsonify({"message": "User not found"})
 
+class Users(Resource):
+    def get(self):
+        return jsonify({"users": str(users)})
 
 api.add_resource(Login, '/login')
+api.add_resource(Users, '/users')
 
 
 if __name__ == '__main__':

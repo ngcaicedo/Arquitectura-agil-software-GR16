@@ -12,6 +12,14 @@ services:
       - seguridad
     networks:
       - app_network
+  
+  ventas:
+    build: ./ventas
+    depends_on:
+      - seguridad
+      - usuarios
+    networks:
+      - app_network
       
   nginx:
     image: nginx:latest
@@ -22,6 +30,7 @@ services:
     depends_on:
         - usuarios
         - seguridad
+        - ventas
     networks:
       - app_network
 
