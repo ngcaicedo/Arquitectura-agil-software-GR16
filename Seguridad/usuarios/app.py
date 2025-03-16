@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
-import requests
 from flask_restful import Api, Resource
-
+from flask_jwt_extended import create_access_token, JWTManager
 
 users = [
     {
@@ -11,7 +10,6 @@ users = [
         "password": "1234",
         "perfil": "ventas"
     },
-
     {
         "id": 2,
         "name": "Diego",
@@ -19,7 +17,6 @@ users = [
         "password": "5678",
         "perfil": "transporte"
     },
-
     {
         "id": 3,
         "name": "Jose",
@@ -27,7 +24,6 @@ users = [
         "password": "9012",
         "perfil": "ventas"
     },
-
     {
         "id": 4,
         "name": "Nicolas",
@@ -37,10 +33,10 @@ users = [
     }
 ]
 
-
 app = Flask(__name__)
+app.config["JWT_SECRET_KEY"] = "secret-jwt"  # Change this!
+jwt = JWTManager(app)
 api = Api(app)
-
 
 class Login(Resource):
     def post(self):
@@ -49,17 +45,24 @@ class Login(Resource):
         password = data["password"]
         for user in users:
             if user["email"] == email and user["password"] == password:
-                token = requests.get("http://seguridad:5000/jwt")
-                return jsonify({"message": "User logged in", "user_id": user.get('id'), "user_perfil": user.get("perfil"), "token": str(token.json().get('access_token'))})
-        return jsonify({"message": "User not found"})
+                access_token = create_access_token(identity=email)
+                return jsonify({"message": "User logged in", "user_id": user.get('id'), "user_perfil": user.get("perfil"), "token": access_token})
+        return jsonify({"message": "User not found"}), 401
 
 class Users(Resource):
     def get(self):
-        return jsonify({"users": str(users)})
+        return jsonify({"users": users})
+
+class UserProfile(Resource):
+    def get(self, email):
+        for user in users:
+            if user["email"] == email:
+                return jsonify({"perfil": user["perfil"]})
+        return jsonify({"message": "User not found"}), 404
 
 api.add_resource(Login, '/login')
 api.add_resource(Users, '/users')
-
+api.add_resource(UserProfile, '/users/<string:email>')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
