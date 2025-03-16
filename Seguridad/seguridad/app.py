@@ -10,12 +10,12 @@ jwt = JWTManager(app)
 api = Api(app)
 
 class AuthResource(Resource):
-    def get(self):
-        access_token = create_access_token(identity="test")
+    def get(self, email):
+        access_token = create_access_token(identity=email)
         return jsonify(access_token=access_token)
 
 
-api.add_resource(AuthResource, '/jwt')
+api.add_resource(AuthResource, '/jwt/<string:email>')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

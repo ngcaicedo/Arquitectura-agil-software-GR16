@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_restful import Api, Resource
 from flask_jwt_extended import create_access_token, JWTManager
+import requests
 
 users = [
     {
@@ -45,7 +46,7 @@ class Login(Resource):
         password = data["password"]
         for user in users:
             if user["email"] == email and user["password"] == password:
-                access_token = create_access_token(identity=email)
+                access_token = requests.get(f"http://seguridad:5000/jwt/{email}").json().get("access_token")
                 return jsonify({"message": "User logged in", "user_id": user.get('id'), "user_perfil": user.get("perfil"), "token": access_token})
         return jsonify({"message": "User not found"}), 401
 

@@ -50,12 +50,13 @@ class Venta(Resource):
         print(f"The current user is {current_user}")
         # Obtener el perfil del usuario
         perfil = get_user_profile(current_user)
+        print(f"The current user profile is {perfil}")
         if perfil is None:
-            return jsonify({"message": "User profile not found"}), 404
+            return jsonify({"message": "User profile not found"})
         # Validación del tipo de usuario
-        intruder = suspectUser(current_user)
-        if intruder:
-            return jsonify({"message": "Unauthorized"}), 401
+        #intruder = suspectUser(current_user)
+        if perfil!="ventas":
+            return jsonify({"message": "Unauthorized"})
         # Aquí puedes agregar la lógica para manejar la solicitud GET
         return jsonify({"message": "Authorized", "user": current_user, "perfil": perfil})
 
