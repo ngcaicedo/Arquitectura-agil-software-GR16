@@ -1,4 +1,4 @@
-# Experimento 1
+# Experimento 2
 
 ## Integrantes del Proyecto
 
@@ -12,4 +12,5 @@
 ## Pasos para ejecutar el aplicativo
 1. Clone el repositorio en su equipo local. Como requisitos debe tener instalado python y docker
 2. Ejecute el comando ```docker compose up --build``` para caso de linux y ```docker-compose up --build``` en windows
-3. Ejecute la prueba en postman
+3. Ejecute el script ```$ python Seguridad/scripts/check_venta.py``` ubicándose en la raiz del proyecto
+4. Valide el resultado en los archivos generados en la ruta ```Seguridad/scripts/``` con nombres ```valida_acceso.csv``` y ```valida_modificacion_venta.csv```
